@@ -15,8 +15,22 @@ interface DiscordUser {
 export function DiscordWidget() {
   const [userData, setUserData] = useState<DiscordUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
 
   useEffect(() => {
+    const isDark = document.documentElement.classList.contains('dark');
+    setTheme(isDark ? 'dark' : 'light');
+
+    const observer = new MutationObserver(() => {
+      const isDark = document.documentElement.classList.contains('dark');
+      setTheme(isDark ? 'dark' : 'light');
+    });
+    
+    observer.observe(document.documentElement, { 
+      attributes: true, 
+      attributeFilter: ['class'] 
+    });
+
     const fetchDiscordData = async () => {
       try {
         const response = await fetch('/api/discord');
@@ -32,6 +46,8 @@ export function DiscordWidget() {
     };
 
     fetchDiscordData();
+
+    return () => observer.disconnect();
   }, []);
 
   // Return placeholder with same dimensions while loading
@@ -90,7 +106,7 @@ export function DiscordWidget() {
           </span>
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
             <img 
-              src="/discord.png" 
+              src={theme === 'dark' ? "/discord.png" : "/discord-black.png"} 
               alt="Discord Icon" 
               className="w-3 h-3"
             />
