@@ -122,7 +122,6 @@ export function Portfolio() {
 
   return (
     <div className="snap-y snap-mandatory h-screen overflow-y-scroll hide-scrollbar">
-      {/* Hero Section */}
       <section className="snap-start h-screen flex items-center justify-center relative">
         <motion.div 
           className="text-center space-y-8"
@@ -130,7 +129,6 @@ export function Portfolio() {
           initial="hidden"
           animate="visible"
         >
-          {/* Add the TimeWeatherWidget here */}
           <motion.div variants={itemVariants}>
             <TimeWeatherWidget />
           </motion.div>
@@ -139,7 +137,7 @@ export function Portfolio() {
             <img 
               src={AVATAR_URL}
               alt={NAME}
-              className="w-16 h-16 rounded-full"
+              className="w-8 h-8 rounded-full"
             />
             <span className="text-xl font-medium">{NAME}</span>
           </motion.div>
@@ -169,7 +167,6 @@ export function Portfolio() {
           </motion.div>
         </motion.div>
 
-        {/* Update the scroll indicator positioning */}
         <motion.div 
           className="absolute bottom-8 w-full flex justify-center items-center"
           initial={{ opacity: 0, y: -10 }}
@@ -187,7 +184,6 @@ export function Portfolio() {
         </motion.div>
       </section>
 
-      {/* Projects Section */}
       <section className="snap-start min-h-screen flex items-center justify-center bg-secondary/5 py-16">
         <motion.div
           initial="hidden"
@@ -228,7 +224,6 @@ export function Portfolio() {
         </motion.div>
       </section>
 
-      {/* Skills Section */}
       <section className="snap-start min-h-screen flex items-center justify-center py-16">
         <motion.div
           initial="hidden"
@@ -262,7 +257,6 @@ export function Portfolio() {
         </motion.div>
       </section>
 
-      {/* Contact Section */}
       <section className="snap-start min-h-screen flex items-center justify-center bg-secondary/5 py-16">
         <motion.div
           initial={{ opacity: 0 }}

@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 interface WeatherData {
   city: string;
   temperature: number;
   time: string;
+  location?: string;
 }
 
 export function TimeWeatherWidget() {
@@ -44,7 +51,8 @@ export function TimeWeatherWidget() {
         setWeatherData({
           city: weatherData.city,
           temperature: weatherData.temperature,
-          time: `${hours}${minutes}`
+          time: `${hours}${minutes}`,
+          location: `${locationData.city}, ${locationData.country_name}` // Add formatted location
         });
       } catch (error) {
         console.error('Failed to fetch data:', error);
@@ -56,7 +64,8 @@ export function TimeWeatherWidget() {
         setWeatherData({
           city: '',
           temperature: 0,
-          time: `${hours}${minutes}`
+          time: `${hours}${minutes}`,
+          location: ''
         });
       } finally {
         setLoading(false);
@@ -150,19 +159,28 @@ export function TimeWeatherWidget() {
                 className="w-[1px] h-5 bg-muted-foreground/20 flex-shrink-0"
               />
               
-              <motion.span
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ 
-                  type: "spring",
-                  stiffness: 200,
-                  damping: 20
-                }}
-                className="ml-4 flex-shrink-0 font-['JetBrains_Mono'] text-sm"
-              >
-                {weatherData.temperature}°C
-              </motion.span>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <motion.span
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      transition={{ 
+                        type: "spring",
+                        stiffness: 200,
+                        damping: 20
+                      }}
+                      className="ml-4 flex-shrink-0 font-['JetBrains_Mono'] text-sm cursor-help"
+                    >
+                      {weatherData.temperature}°C
+                    </motion.span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{weatherData.location}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </motion.div>
           </>
         )}
