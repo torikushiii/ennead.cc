@@ -95,7 +95,7 @@ export function Portfolio() {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch('/api/github');
+        const response = await fetch('/api/github/repos');
         
         if (!response.ok) {
           const errorData = await response.json();

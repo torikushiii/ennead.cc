@@ -33,7 +33,7 @@ export function DiscordWidget() {
 
     const fetchDiscordData = async () => {
       try {
-        const response = await fetch('/api/discord');
+        const response = await fetch('/api/discord/user');
         const data = await response.json();
         if (data.id) {
           setUserData(data);
