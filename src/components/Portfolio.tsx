@@ -7,6 +7,7 @@ import { ProjectCard } from "@/components/ui/project-card";
 import { SkillCard } from "@/components/ui/skill-card";
 import { ContactForm } from "@/components/ui/contact-form";
 import { ChevronDown } from "lucide-react";
+import { TimeWeatherWidget } from "@/components/ui/time-weather-widget";
 
 interface GitHubRepo {
   id: number;
@@ -129,6 +130,11 @@ export function Portfolio() {
           initial="hidden"
           animate="visible"
         >
+          {/* Add the TimeWeatherWidget here */}
+          <motion.div variants={itemVariants}>
+            <TimeWeatherWidget />
+          </motion.div>
+
           <motion.div variants={itemVariants} className="flex items-center justify-center gap-4">
             <img 
               src={AVATAR_URL}
