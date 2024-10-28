@@ -30,7 +30,7 @@ const skillCategories = [
   },
   {
     title: "Frameworks & Libraries",
-    skills: ["Node.js", "React", "Astro", "Tailwind CSS"]
+    skills: ["Node.js", "React", "Astro", "Tailwind CSS", "Svelte"]
   },
   {
     title: "Databases",
