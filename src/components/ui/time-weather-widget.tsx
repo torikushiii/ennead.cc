@@ -91,9 +91,18 @@ export function TimeWeatherWidget() {
       setShowColon(prev => !prev);
     }, 1000);
 
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() === 'l' && !e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey) {
+        toggleTheme();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+
     return () => {
       clearInterval(timeInterval);
       clearInterval(blinkInterval);
+      window.removeEventListener('keydown', handleKeyPress);
     };
   }, []);
 
@@ -123,14 +132,23 @@ export function TimeWeatherWidget() {
       animate={{ width: "auto" }}
       className="inline-flex items-center gap-4 px-4 py-2.5 rounded-full bg-secondary/30 text-sm text-muted-foreground overflow-hidden font-mono"
     >
-      <motion.button 
-        layout
-        onClick={toggleTheme}
-        className="p-1.5 hover:bg-secondary/50 rounded-full transition-colors relative flex-shrink-0"
-      >
-        <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-        <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 top-1.5 left-1.5" />
-      </motion.button>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <motion.button 
+              layout
+              onClick={toggleTheme}
+              className="p-1.5 hover:bg-secondary/50 rounded-full transition-colors relative flex-shrink-0"
+            >
+              <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+              <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 top-1.5 left-1.5" />
+            </motion.button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Press 'L' to toggle</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
 
       <motion.div layout className="w-[1px] h-5 bg-muted-foreground/20 flex-shrink-0" />
 
