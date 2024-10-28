@@ -27,8 +27,9 @@ const REPO_URLS = [
   "repos/torikushiii/DiscordTwitterBot",
   "repos/torikushiii/HonkaiStarRailAPI",
   "repos/torikushiii/youtube-archive",
+  "repos/torikushiii/levelinfinite",
   "repos/torikushiii/uploader",
-  "repos/torikushiii/levelinfinite"
+  "repos/torikushiii/ennead.cc",
 ];
 
 export const GET: APIRoute = async ({ locals }) => {
