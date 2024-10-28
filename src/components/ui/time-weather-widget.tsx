@@ -132,7 +132,7 @@ export function TimeWeatherWidget() {
       animate={{ width: "auto" }}
       className="inline-flex items-center gap-4 px-4 py-2.5 rounded-full bg-secondary/30 text-sm text-muted-foreground overflow-hidden font-mono"
     >
-      <TooltipProvider>
+      <TooltipProvider delayDuration={0}>
         <Tooltip>
           <TooltipTrigger asChild>
             <motion.button 
@@ -177,7 +177,7 @@ export function TimeWeatherWidget() {
                 className="w-[1px] h-5 bg-muted-foreground/20 flex-shrink-0"
               />
               
-              <TooltipProvider>
+              <TooltipProvider delayDuration={0}>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <motion.span
