@@ -265,15 +265,20 @@ export function Portfolio() {
           className="text-center space-y-8 md:space-y-12 container mx-auto px-4"
         >
           <h2 className="text-2xl md:text-3xl font-bold">Get in Touch</h2>
-          <div className="flex flex-col items-center gap-6 md:gap-8">
-            <div className="flex flex-col gap-6 items-center justify-center w-full">
+          <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start justify-center">
+            <div className="flex flex-col gap-6 items-center md:items-start w-full md:w-auto">
               <DiscordWidget />
-              <div className="flex gap-4 justify-center">
+              
+              <div className="flex items-center gap-3">
                 <SocialIcon platform="github" href={GITHUB_URL} />
+                <span className="text-sm">torikushiii</span>
+              </div>
+              <div className="flex items-center gap-3">
                 <SocialIcon platform="email" href={`mailto:${EMAIL}`} />
+                <span className="text-sm">torikushiii@proton.me</span>
               </div>
             </div>
-            <div className="w-full max-w-md px-4">
+            <div className="w-full md:w-[400px]">
               <ContactForm />
             </div>
           </div>
