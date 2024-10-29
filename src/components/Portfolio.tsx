@@ -120,20 +120,49 @@ export function Portfolio() {
     fetchProjects();
   }, []);
 
+  const getTopProjects = (projects: GitHubRepo[]) => {
+    return [...projects]
+      .sort((a, b) => b.stargazers_count - a.stargazers_count)
+      .slice(0, 5);
+  };
+
+  const mainSectionVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.3,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const mainItemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    },
+  };
+
   return (
     <div className="snap-y snap-mandatory h-screen overflow-y-scroll hide-scrollbar">
       <section className="snap-start h-screen flex items-center justify-center relative">
         <motion.div 
           className="text-center space-y-8"
-          variants={containerVariants}
+          variants={mainSectionVariants}
           initial="hidden"
           animate="visible"
         >
-          <motion.div variants={itemVariants}>
+          <motion.div variants={mainItemVariants}>
             <TimeWeatherWidget />
           </motion.div>
 
-          <motion.div variants={itemVariants} className="flex items-center justify-center gap-4">
+          <motion.div variants={mainItemVariants} className="flex items-center justify-center gap-4">
             <img 
               src={AVATAR_URL}
               alt={NAME}
@@ -142,39 +171,60 @@ export function Portfolio() {
             <span className="text-xl font-medium">{NAME}</span>
           </motion.div>
 
-          <motion.h1 variants={itemVariants} className="text-3xl md:text-4xl font-bold px-4">
+          <motion.h1 variants={mainItemVariants} className="text-3xl md:text-4xl font-bold px-4">
             Welcome to <span className="text-muted-foreground">my</span>
             <br /> 
             side of the <span className="text-muted-foreground">web.</span>
           </motion.h1>
           
-          <motion.p variants={itemVariants} className="text-muted-foreground max-w-2xl px-6 text-sm md:text-base">
+          <motion.p variants={mainItemVariants} className="text-muted-foreground max-w-2xl px-6 text-sm md:text-base">
             Hello! I'm {NAME}, a developer passionate about automation and learning new technologies. 
             I specialize in JavaScript and enjoy working on various projects that challenge me and expand my skills.
           </motion.p>
 
-          <motion.div variants={itemVariants} className="flex justify-center">
-            <DiscordWidget />
-          </motion.div>
-
-          <motion.div 
-            variants={itemVariants} 
-            className="flex items-center justify-center space-x-4"
-          >
-            <SocialIcon platform="github" href={GITHUB_URL} />
-            <SocialIcon platform="email" href={EMAIL} />
-            <SocialIcon platform="website" href={WEBSITE} />
-          </motion.div>
+          {!loading && !error && projects.length > 0 && (
+            <motion.div 
+              variants={mainItemVariants} 
+              className="max-w-md mx-auto text-left px-6"
+            >
+              <motion.h3 
+                variants={mainItemVariants}
+                className="text-sm uppercase tracking-wider text-muted-foreground mb-4"
+              >
+                Recent Work
+              </motion.h3>
+              <motion.div 
+                variants={mainSectionVariants}
+                className="space-y-3"
+              >
+                {getTopProjects(projects).map((project) => (
+                  <motion.a
+                    key={project.id}
+                    variants={mainItemVariants}
+                    href={project.html_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between group"
+                    whileHover={{ x: 4 }}
+                  >
+                    <span className="text-sm font-medium group-hover:text-primary transition-colors">
+                      {project.name}
+                    </span>
+                    <span className="text-muted-foreground">→</span>
+                  </motion.a>
+                ))}
+              </motion.div>
+            </motion.div>
+          )}
         </motion.div>
 
         <motion.div 
           className="absolute bottom-8 w-full flex justify-center items-center"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ 
-            duration: 1,
-            repeat: Infinity,
-            repeatType: "reverse"
+            delay: 2,
+            duration: 0.5 
           }}
         >
           <div className="flex flex-col items-center gap-2 text-muted-foreground">

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, Link2, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { SocialIcon } from "@/components/ui/social-icons";
+import { GITHUB_URL, EMAIL } from "@/script/constants";
 import {
   Tooltip,
   TooltipContent,
@@ -20,6 +22,7 @@ export function TimeWeatherWidget() {
   const [loading, setLoading] = useState(true);
   const [showColon, setShowColon] = useState(true);
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     const isDark = document.documentElement.classList.contains('dark');
@@ -152,7 +155,49 @@ export function TimeWeatherWidget() {
 
       <motion.div layout className="w-[1px] h-5 bg-muted-foreground/20 flex-shrink-0" />
 
-      <motion.div layout className="flex items-center text-sm flex-shrink-0 font-['JetBrains_Mono']">
+      <motion.button
+        layout="position"
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="p-1.5 hover:bg-secondary/50 rounded-full transition-colors flex-shrink-0"
+      >
+        {isExpanded ? (
+          <X className="h-4 w-4" />
+        ) : (
+          <Link2 className="h-4 w-4" />
+        )}
+      </motion.button>
+
+      <AnimatePresence mode="popLayout">
+        {isExpanded && (
+          <motion.div
+            layout
+            initial={{ opacity: 0, width: 0 }}
+            animate={{ opacity: 1, width: "auto" }}
+            exit={{ opacity: 0, width: 0 }}
+            transition={{ duration: 0.2 }}
+            className="flex items-center gap-3"
+          >
+            <motion.a
+              href={GITHUB_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-1.5 hover:bg-secondary/50 rounded-full transition-colors"
+            >
+              <SocialIcon platform="github" href={GITHUB_URL} size="sm" />
+            </motion.a>
+            <motion.a
+              href={`mailto:${EMAIL}`}
+              className="p-1.5 hover:bg-secondary/50 rounded-full transition-colors"
+            >
+              <SocialIcon platform="email" href={`mailto:${EMAIL}`} size="sm" />
+            </motion.a>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <motion.div layout="position" className="w-[1px] h-5 bg-muted-foreground/20 flex-shrink-0" />
+
+      <motion.div layout="position" className="flex items-center text-sm flex-shrink-0">
         <span>{hours}</span>
         <span className={`${showColon ? 'opacity-100' : 'opacity-0'} transition-opacity duration-150 mx-0.5`}>
           :
@@ -189,7 +234,7 @@ export function TimeWeatherWidget() {
                         stiffness: 200,
                         damping: 20
                       }}
-                      className="ml-4 flex-shrink-0 font-['JetBrains_Mono'] text-sm cursor-help"
+                      className="ml-4 flex-shrink-0 text-sm cursor-help"
                     >
                       {weatherData.temperature}°C
                     </motion.span>

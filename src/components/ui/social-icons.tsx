@@ -11,9 +11,10 @@ interface SocialIconsProps {
   platform: keyof typeof icons
   className?: string
   href: string
+  size?: 'sm' | 'default'
 }
 
-export function SocialIcon({ platform, className, href }: SocialIconsProps) {
+export function SocialIcon({ platform, className, href, size = 'default' }: SocialIconsProps) {
   const Icon = icons[platform]
   
   return (
@@ -26,7 +27,9 @@ export function SocialIcon({ platform, className, href }: SocialIconsProps) {
         className
       )}
     >
-      <Icon className="h-5 w-5" />
+      <Icon className={cn(
+        size === 'sm' ? "h-4 w-4" : "h-5 w-5"
+      )} />
     </a>
   )
 }
