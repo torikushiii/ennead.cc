@@ -191,7 +191,7 @@ export function Portfolio() {
                 variants={mainItemVariants}
                 className="text-sm uppercase tracking-wider text-muted-foreground mb-4"
               >
-                Recent Work
+                Highlighted Projects
               </motion.h3>
               <motion.div 
                 variants={mainSectionVariants}
@@ -319,14 +319,23 @@ export function Portfolio() {
             <div className="flex flex-col gap-6 items-center md:items-start w-full md:w-auto">
               <DiscordWidget />
               
-              <div className="flex items-center gap-3">
+              <a 
+                href={GITHUB_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 hover:text-foreground transition-colors"
+              >
                 <SocialIcon platform="github" href={GITHUB_URL} />
                 <span className="text-sm">torikushiii</span>
-              </div>
-              <div className="flex items-center gap-3">
+              </a>
+
+              <a 
+                href={`mailto:${EMAIL}`}
+                className="flex items-center gap-3 hover:text-foreground transition-colors"
+              >
                 <SocialIcon platform="email" href={`mailto:${EMAIL}`} />
                 <span className="text-sm">torikushiii@proton.me</span>
-              </div>
+              </a>
             </div>
             <div className="w-full md:w-[400px]">
               <ContactForm />
