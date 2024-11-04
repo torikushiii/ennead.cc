@@ -57,6 +57,10 @@ const skillsMap = {
   "Svelte": {
     icon: "logos:svelte-icon",
     url: "https://svelte.dev"
+  },
+  "Rust": {
+    icon: "logos:rust",
+    url: "https://www.rust-lang.org"
   }
 } as const;
 

@@ -26,7 +26,7 @@ interface GitHubRepo {
 const skillCategories = [
   {
     title: "Languages",
-    skills: ["Go", "Python", "JavaScript", "TypeScript"]
+    skills: ["Go", "Python", "JavaScript", "TypeScript", "Rust"]
   },
   {
     title: "Frameworks & Libraries",
