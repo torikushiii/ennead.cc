@@ -38,7 +38,7 @@ export const GET: APIRoute = async ({ locals }) => {
       REPO_URLS.map(async (url) => {
         const response = await fetch(`https://api.github.com/${url}`, {
           headers: {
-            'Authorization': `token ${GITHUB_TOKEN}`, 
+            'Authorization': `token ${GITHUB_TOKEN}`,
             'Accept': 'application/vnd.github.v3+json',
             'User-Agent': 'ennead'
           }
@@ -67,9 +67,9 @@ export const GET: APIRoute = async ({ locals }) => {
   } catch (error) {
     console.error('GitHub API Error:', error);
     return new Response(
-      JSON.stringify({ 
+      JSON.stringify({
         error: error instanceof Error ? error.message : 'Failed to fetch GitHub data'
-      }), 
+      }),
       {
         status: 500,
         headers: {

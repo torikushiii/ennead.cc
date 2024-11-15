@@ -16,9 +16,9 @@ interface SocialIconsProps {
 
 export function SocialIcon({ platform, className, href, size = 'default' }: SocialIconsProps) {
   const Icon = icons[platform]
-  
+
   return (
-    <a 
+    <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"

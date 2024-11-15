@@ -36,7 +36,7 @@ export const GET: APIRoute = async () => {
     }
 
     const userData = await response.json();
-    
+
     const filteredData: DiscordResponse = {
       id: userData.id,
       username: userData.username,
@@ -44,7 +44,7 @@ export const GET: APIRoute = async () => {
       global_name: userData.global_name,
       banner: userData.banner
     };
-    
+
     cachedData = filteredData;
     lastFetch = Date.now();
 

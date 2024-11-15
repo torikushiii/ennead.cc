@@ -34,7 +34,7 @@ export function TimeWeatherWidget() {
         if (!locationResponse.ok) {
           throw new Error('Failed to get location');
         }
-        
+
         const locationData = await locationResponse.json();
         if (locationData.error || !locationData.city) {
           throw new Error(locationData.error || 'No city found');
@@ -44,9 +44,9 @@ export function TimeWeatherWidget() {
         if (!weatherResponse.ok) {
           throw new Error('Failed to fetch weather data');
         }
-        
+
         const weatherData = await weatherResponse.json();
-        
+
         const now = new Date();
         const hours = now.getHours().toString().padStart(2, '0');
         const minutes = now.getMinutes().toString().padStart(2, '0');
@@ -76,13 +76,13 @@ export function TimeWeatherWidget() {
     };
 
     fetchData();
-    
+
     const timeInterval = setInterval(() => {
       if (weatherData) {
         const now = new Date();
         const hours = now.getHours().toString().padStart(2, '0');
         const minutes = now.getMinutes().toString().padStart(2, '0');
-        
+
         setWeatherData(prev => ({
           ...prev!,
           time: `${hours}${minutes}`
@@ -138,7 +138,7 @@ export function TimeWeatherWidget() {
       <TooltipProvider delayDuration={0}>
         <Tooltip>
           <TooltipTrigger asChild>
-            <motion.button 
+            <motion.button
               layout
               onClick={toggleTheme}
               className="p-1.5 hover:bg-secondary/50 rounded-full transition-colors relative flex-shrink-0"
@@ -221,7 +221,7 @@ export function TimeWeatherWidget() {
                 exit={{ opacity: 0 }}
                 className="w-[1px] h-5 bg-muted-foreground/20 flex-shrink-0"
               />
-              
+
               <TooltipProvider delayDuration={0}>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -229,7 +229,7 @@ export function TimeWeatherWidget() {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -20 }}
-                      transition={{ 
+                      transition={{
                         type: "spring",
                         stiffness: 200,
                         damping: 20

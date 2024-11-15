@@ -36,7 +36,7 @@ export const GET: APIRoute = async ({ locals, request }) => {
 
     const weatherUrl = `${OPENWEATHER_BASE_URL}?${params.toString()}`;
     const weatherResponse = await fetch(weatherUrl);
-    
+
     if (!weatherResponse.ok) {
       throw new Error(`Weather API error: ${weatherResponse.status}`);
     }
@@ -61,9 +61,9 @@ export const GET: APIRoute = async ({ locals, request }) => {
   } catch (error) {
     console.error('Weather API Error:', error);
     return new Response(
-      JSON.stringify({ 
+      JSON.stringify({
         error: error instanceof Error ? error.message : 'Failed to fetch weather data'
-      }), 
+      }),
       {
         status: 500,
         headers: {

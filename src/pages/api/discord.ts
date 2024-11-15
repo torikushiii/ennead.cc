@@ -28,7 +28,7 @@ export const GET: APIRoute = async () => {
     }
 
     const userData = await response.json();
-    
+
     // Cache the response
     cachedData = userData;
     lastFetch = Date.now();
