@@ -96,12 +96,12 @@ export function Portfolio() {
         setLoading(true);
         setError(null);
         const response = await fetch('/api/github/repos');
-        
+
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(errorData.error || 'Failed to fetch projects');
         }
-        
+
         const data = await response.json();
         if (Array.isArray(data)) {
           setProjects(data);
@@ -150,9 +150,9 @@ export function Portfolio() {
   };
 
   return (
-    <div className="snap-y snap-mandatory h-screen overflow-y-scroll hide-scrollbar">
-      <section className="snap-start h-screen flex items-center justify-center relative">
-        <motion.div 
+    <div className="h-screen overflow-y-scroll hide-scrollbar">
+      <section className="h-screen flex items-center justify-center relative">
+        <motion.div
           className="text-center space-y-8"
           variants={mainSectionVariants}
           initial="hidden"
@@ -163,7 +163,7 @@ export function Portfolio() {
           </motion.div>
 
           <motion.div variants={mainItemVariants} className="flex items-center justify-center gap-4">
-            <img 
+            <img
               src={AVATAR_URL}
               alt={NAME}
               className="w-8 h-8 rounded-full"
@@ -173,27 +173,27 @@ export function Portfolio() {
 
           <motion.h1 variants={mainItemVariants} className="text-3xl md:text-4xl font-bold px-4">
             Welcome to <span className="text-muted-foreground">my</span>
-            <br /> 
+            <br />
             side of the <span className="text-muted-foreground">web.</span>
           </motion.h1>
-          
+
           <motion.p variants={mainItemVariants} className="text-muted-foreground max-w-2xl px-6 text-sm md:text-base">
-            Hello! I'm {NAME}, a developer passionate about automation and learning new technologies. 
-            I specialize in JavaScript and enjoy working on various projects that challenge me and expand my skills.
+            Hello! I'm {NAME}, a backend developer and JavaScript developer who builds automation solutions.
+            I focus on creating efficient tools that solve real problems while constantly expanding my technical expertise through hands-on projects.
           </motion.p>
 
           {!loading && !error && projects.length > 0 && (
-            <motion.div 
-              variants={mainItemVariants} 
+            <motion.div
+              variants={mainItemVariants}
               className="max-w-md mx-auto text-left px-6"
             >
-              <motion.h3 
+              <motion.h3
                 variants={mainItemVariants}
                 className="text-sm uppercase tracking-wider text-muted-foreground mb-4"
               >
                 Highlighted Projects
               </motion.h3>
-              <motion.div 
+              <motion.div
                 variants={mainSectionVariants}
                 className="space-y-3"
               >
@@ -218,13 +218,13 @@ export function Portfolio() {
           )}
         </motion.div>
 
-        <motion.div 
+        <motion.div
           className="absolute bottom-8 w-full flex justify-center items-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ 
+          transition={{
             delay: 2,
-            duration: 0.5 
+            duration: 0.5
           }}
         >
           <div className="flex flex-col items-center gap-2 text-muted-foreground">
@@ -234,7 +234,7 @@ export function Portfolio() {
         </motion.div>
       </section>
 
-      <section className="snap-start min-h-screen flex items-center justify-center bg-secondary/5 py-16">
+      <section className="min-h-screen flex items-center justify-center bg-secondary/5 py-16">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -252,7 +252,7 @@ export function Portfolio() {
           ) : projects.length === 0 ? (
             <div className="text-muted-foreground">No projects found</div>
           ) : (
-            <motion.div 
+            <motion.div
               variants={sectionVariants}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
@@ -274,7 +274,7 @@ export function Portfolio() {
         </motion.div>
       </section>
 
-      <section className="snap-start min-h-screen flex items-center justify-center py-16">
+      <section className="min-h-screen flex items-center justify-center py-16">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -291,7 +291,7 @@ export function Portfolio() {
                 <h3 className="text-xl font-semibold text-muted-foreground">
                   {category.title}
                 </h3>
-                <motion.div 
+                <motion.div
                   variants={sectionVariants}
                   className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
                 >
@@ -307,7 +307,7 @@ export function Portfolio() {
         </motion.div>
       </section>
 
-      <section className="snap-start min-h-screen flex items-center justify-center bg-secondary/5 py-16">
+      <section className="min-h-screen flex items-center justify-center bg-secondary/5 py-16">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -318,8 +318,8 @@ export function Portfolio() {
           <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start justify-center">
             <div className="flex flex-col gap-6 items-center md:items-start w-full md:w-auto">
               <DiscordWidget />
-              
-              <a 
+
+              <a
                 href={GITHUB_URL}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -329,7 +329,7 @@ export function Portfolio() {
                 <span className="text-sm">torikushiii</span>
               </a>
 
-              <a 
+              <a
                 href={`mailto:${EMAIL}`}
                 className="flex items-center gap-3 hover:text-foreground transition-colors"
               >
