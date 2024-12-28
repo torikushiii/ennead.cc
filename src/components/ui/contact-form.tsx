@@ -16,11 +16,16 @@ export function ContactForm() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (isSubmitting) return;
+
     setIsSubmitting(true);
     setSubmitStatus("idle");
+    setErrorMessage("");
 
     try {
       const response = await fetch("/api/contact", {
@@ -31,13 +36,18 @@ export function ContactForm() {
         body: JSON.stringify(formData),
       });
 
-      if (!response.ok) throw new Error("Failed to send message");
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to send message");
+      }
 
       setSubmitStatus("success");
       setFormData({ name: "", email: "", message: "" });
     } catch (error) {
       console.error("Failed to send message:", error);
       setSubmitStatus("error");
+      setErrorMessage(error instanceof Error ? error.message : "Failed to send message");
     } finally {
       setIsSubmitting(false);
     }
@@ -87,7 +97,9 @@ export function ContactForm() {
         <p className="text-green-500 text-sm">Message sent successfully!</p>
       )}
       {submitStatus === "error" && (
-        <p className="text-red-500 text-sm">Failed to send message. Please try again.</p>
+        <p className="text-red-500 text-sm">
+          {errorMessage || "Failed to send message. Please try again."}
+        </p>
       )}
     </form>
   );
