@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Loader2 } from "lucide-react";
 import { ProjectCard } from "@/components/ui/project-card";
 import { useEffect, useState } from "react";
 
@@ -85,7 +86,10 @@ export function ProjectsList() {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[200px]">
-        <div className="text-muted-foreground animate-pulse">Loading projects...</div>
+        <div className="flex flex-col items-center gap-2">
+          <Loader2 className="h-6 w-6 animate-spin text-primary" />
+          <span className="text-muted-foreground">Loading projects...</span>
+        </div>
       </div>
     );
   }
