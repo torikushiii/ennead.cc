@@ -21,12 +21,8 @@ export function TimeWeatherWidget() {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true);
   const [showColon, setShowColon] = useState(true);
-  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
 
   useEffect(() => {
-    const isDarkMode = document.documentElement.classList.contains('dark');
-    setTheme(isDarkMode ? 'dark' : 'light');
-
     const fetchData = async () => {
       try {
         const locationResponse = await fetch('https://ipapi.co/json/');
@@ -107,29 +103,11 @@ export function TimeWeatherWidget() {
       setShowColon(prev => !prev);
     }, 1000);
 
-    const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key.toLowerCase() === 'l' && !e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey) {
-        toggleTheme();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyPress);
-
     return () => {
       if (cleanupTimer) cleanupTimer();
       clearInterval(blinkInterval);
-      window.removeEventListener('keydown', handleKeyPress);
     };
   }, []);
-
-  useEffect(() => {
-    document.documentElement.classList[theme === 'dark' ? 'add' : 'remove']('dark');
-  }, [theme]);
-
-  const toggleTheme = () => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark';
-    setTheme(newTheme);
-  };
 
   if (loading) {
     return (
@@ -206,27 +184,6 @@ export function TimeWeatherWidget() {
           <SocialIcon platform="email" href={`mailto:${EMAIL}`} size="sm" />
         </motion.a>
       </div>
-
-      <motion.div layout className="w-[1px] h-5 bg-muted-foreground/20 flex-shrink-0" />
-
-      <TooltipProvider delayDuration={0}>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <motion.button
-              layout
-              onClick={toggleTheme}
-              className="p-1.5 hover:bg-secondary/50 rounded-full transition-colors relative flex-shrink-0"
-              whileHover={{ scale: 1.1 }}
-            >
-              <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-              <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 top-1.5 left-1.5" />
-            </motion.button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Press 'L' to toggle</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
     </motion.div>
   );
 }
