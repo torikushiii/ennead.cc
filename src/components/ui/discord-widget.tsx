@@ -10,6 +10,11 @@ interface DiscordUser {
   global_name: string;
   banner?: string;
   public_flags: number;
+  avatar_decoration_data?: {
+    asset: string;
+    sku_id: string;
+    expires_at: number;
+  };
 }
 
 export function DiscordWidget() {
@@ -60,7 +65,9 @@ export function DiscordWidget() {
       >
         <div className="w-full h-24 bg-secondary/70" />
         <div className="flex items-start gap-3 p-3">
-          <div className="w-10 h-10 rounded-full bg-secondary/70" />
+          <div className="relative flex-shrink-0">
+            <div className="w-10 h-10 rounded-full bg-secondary/70" />
+          </div>
           <div className="flex flex-col gap-2 flex-grow">
             <div className="h-4 bg-secondary/70 rounded w-24" />
             <div className="h-3 bg-secondary/70 rounded w-16" />
@@ -95,11 +102,20 @@ export function DiscordWidget() {
         </div>
       )}
       <div className="flex items-start gap-3 p-3">
-        <img
-          src={`https://cdn.discordapp.com/avatars/${DISCORD_ID}/${userData.avatar}`}
-          alt={userData.username}
-          className="w-10 h-10 rounded-full flex-shrink-0"
-        />
+        <div className="relative flex-shrink-0">
+          <img
+            src={`https://cdn.discordapp.com/avatars/${DISCORD_ID}/${userData.avatar}`}
+            alt={userData.username}
+            className="w-10 h-10 rounded-full flex-shrink-0"
+          />
+          {userData.avatar_decoration_data && (
+            <img
+              src={`https://cdn.discordapp.com/avatar-decoration-presets/${userData.avatar_decoration_data.asset}.png?size=160&passthrough=true`}
+              alt="Avatar Decoration"
+              className="absolute top-0 left-0 w-10 h-10"
+            />
+          )}
+        </div>
         <div className="flex flex-col min-w-0 leading-tight">
           <span className="text-sm font-medium truncate">
             {userData.global_name || userData.username}

@@ -1,0 +1,20 @@
+---
+import '@/styles/globals.css';
+import { ProjectsList } from '@/components/ProjectsList';
+import { NAME } from "@/script/constants";
+import Layout from '@/layouts/Layout.astro';
+
+const title = `${NAME}`;
+const description = 'My projects.';
+---
+
+<Layout title={title} description={description}>
+	<section class="min-h-screen flex items-center justify-center py-16">
+		<div class="text-center space-y-8 container mx-auto px-4">
+			<h1 class="text-3xl font-bold">Projects</h1>
+			<div id="projects" class="mt-12">
+				<ProjectsList client:load />
+			</div>
+		</div>
+	</section>
+</Layout>

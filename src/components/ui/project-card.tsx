@@ -23,8 +23,8 @@ export function ProjectCard({ name, description, language, stars, forks, url, ow
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="block p-4 md:p-6 bg-secondary/30 rounded-lg hover:bg-secondary/50 transition-colors border border-white/10"
-      whileHover={{ y: -5 }}
+      className="block h-full p-4 md:p-6 bg-secondary/30 rounded-lg hover:bg-secondary/50 transition-colors border border-white/10"
+      whileHover={{ y: -5, boxShadow: "0 10px 30px -15px rgba(0, 0, 0, 0.3)" }}
       transition={{ duration: 0.2 }}
     >
       <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
@@ -36,8 +36,8 @@ export function ProjectCard({ name, description, language, stars, forks, url, ow
         <span className="text-xs md:text-sm font-medium">{owner.login}</span>
       </div>
       <h3 className="text-base md:text-lg font-semibold mb-2">{name}</h3>
-      <p className="text-xs md:text-sm text-muted-foreground mb-3 md:mb-4 line-clamp-2">{description}</p>
-      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+      <p className="text-xs md:text-sm text-muted-foreground mb-3 md:mb-4 line-clamp-2">{description || "No description available"}</p>
+      <div className="flex items-center gap-4 text-xs md:text-sm text-muted-foreground mt-auto">
         {language && (
           <span className="flex items-center gap-1">
             <span
@@ -48,11 +48,11 @@ export function ProjectCard({ name, description, language, stars, forks, url, ow
           </span>
         )}
         <span className="flex items-center gap-1">
-          <Star className="w-4 h-4" />
+          <Star className="w-3 h-3 md:w-4 md:h-4" />
           {stars}
         </span>
         <span className="flex items-center gap-1">
-          <GitFork className="w-4 h-4" />
+          <GitFork className="w-3 h-3 md:w-4 md:h-4" />
           {forks}
         </span>
       </div>

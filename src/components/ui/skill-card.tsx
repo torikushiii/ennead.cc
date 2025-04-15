@@ -61,6 +61,10 @@ const skillsMap = {
   "Rust": {
     icon: "logos:rust",
     url: "https://www.rust-lang.org"
+  },
+  "ClickHouse": {
+    icon: "devicon:clickhouse",
+    url: "https://clickhouse.com"
   }
 } as const;
 

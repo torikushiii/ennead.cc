@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Moon, Sun, Link2, X } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SocialIcon } from "@/components/ui/social-icons";
 import { GITHUB_URL, EMAIL } from "@/script/constants";
@@ -22,7 +22,6 @@ export function TimeWeatherWidget() {
   const [loading, setLoading] = useState(true);
   const [showColon, setShowColon] = useState(true);
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
-  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     const isDark = document.documentElement.classList.contains('dark');
@@ -77,19 +76,33 @@ export function TimeWeatherWidget() {
 
     fetchData();
 
-    const timeInterval = setInterval(() => {
-      if (weatherData) {
-        const now = new Date();
-        const hours = now.getHours().toString().padStart(2, '0');
-        const minutes = now.getMinutes().toString().padStart(2, '0');
+    const updateTime = () => {
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
 
-        setWeatherData(prev => ({
-          ...prev!,
-          time: `${hours}${minutes}`
-        }));
-      }
-    }, 60000);
+      setWeatherData(prev => ({
+        ...prev!,
+        time: `${hours}${minutes}`
+      }));
+    };
 
+    const setupTimerSync = () => {
+      updateTime();
+
+      const now = new Date();
+      const millisTillNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+
+      const timeoutId = setTimeout(() => {
+        updateTime();
+        const intervalId = setInterval(updateTime, 60000);
+        return () => clearInterval(intervalId);
+      }, millisTillNextMinute);
+
+      return () => clearTimeout(timeoutId);
+    };
+
+    const cleanupTimer = setupTimerSync();
     const blinkInterval = setInterval(() => {
       setShowColon(prev => !prev);
     }, 1000);
@@ -103,7 +116,7 @@ export function TimeWeatherWidget() {
     window.addEventListener('keydown', handleKeyPress);
 
     return () => {
-      clearInterval(timeInterval);
+      if (cleanupTimer) cleanupTimer();
       clearInterval(blinkInterval);
       window.removeEventListener('keydown', handleKeyPress);
     };
@@ -117,8 +130,14 @@ export function TimeWeatherWidget() {
 
   if (loading) {
     return (
-      <div className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-secondary/30 text-sm text-muted-foreground animate-pulse">
-        <div className="w-24 h-5 bg-secondary/50 rounded" />
+      <div className="inline-flex items-center gap-4 px-4 py-2.5 rounded-lg bg-secondary text-sm text-muted-foreground overflow-hidden font-mono">
+        <div className="w-12 h-5 bg-secondary/50 rounded animate-pulse" />
+        <div className="w-[1px] h-5 bg-muted-foreground/20 flex-shrink-0" />
+        <div className="w-20 h-5 bg-secondary/50 rounded animate-pulse" />
+        <div className="w-[1px] h-5 bg-muted-foreground/20 flex-shrink-0 hidden xs:block" />
+        <div className="w-20 h-5 bg-secondary/50 rounded animate-pulse hidden xs:block" />
+        <div className="w-[1px] h-5 bg-muted-foreground/20 flex-shrink-0" />
+        <div className="w-8 h-5 bg-secondary/50 rounded animate-pulse" />
       </div>
     );
   }
@@ -133,8 +152,60 @@ export function TimeWeatherWidget() {
       layout
       initial={{ width: "auto" }}
       animate={{ width: "auto" }}
-      className="inline-flex items-center gap-4 px-4 py-2.5 rounded-full bg-secondary/30 text-sm text-muted-foreground overflow-hidden font-mono"
+      className="inline-flex items-center gap-4 px-4 py-2.5 rounded-lg bg-secondary text-sm text-muted-foreground overflow-hidden font-mono"
     >
+      <motion.div layout="position" className="flex items-center text-sm flex-shrink-0">
+        <span>{hours}</span>
+        <span className={`${showColon ? 'opacity-100' : 'opacity-0'} transition-opacity duration-150 mx-0.5`}>
+          :
+        </span>
+        <span>{minutes}</span>
+      </motion.div>
+
+      <motion.div layout className="w-[1px] h-5 bg-muted-foreground/20 flex-shrink-0" />
+
+      <AnimatePresence mode="wait">
+        {weatherData.city && (
+          <motion.div
+            layout
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="flex items-center gap-1.5"
+          >
+            <span className="flex-shrink-0">{weatherData.temperature}°C</span>
+            {weatherData.location && (
+              <span className="text-xs text-muted-foreground/60 hidden sm:inline-block">
+                {weatherData.location}
+              </span>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <motion.div layout className="w-[1px] h-5 bg-muted-foreground/20 flex-shrink-0 hidden xs:block" />
+
+      <div className="flex items-center gap-3 hidden xs:flex">
+        <motion.a
+          href={GITHUB_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="p-1.5 hover:bg-secondary/50 rounded-full transition-colors"
+          whileHover={{ scale: 1.1 }}
+        >
+          <SocialIcon platform="github" href={GITHUB_URL} size="sm" />
+        </motion.a>
+        <motion.a
+          href={`mailto:${EMAIL}`}
+          className="p-1.5 hover:bg-secondary/50 rounded-full transition-colors"
+          whileHover={{ scale: 1.1 }}
+        >
+          <SocialIcon platform="email" href={`mailto:${EMAIL}`} size="sm" />
+        </motion.a>
+      </div>
+
+      <motion.div layout className="w-[1px] h-5 bg-muted-foreground/20 flex-shrink-0" />
+
       <TooltipProvider delayDuration={0}>
         <Tooltip>
           <TooltipTrigger asChild>
@@ -142,6 +213,7 @@ export function TimeWeatherWidget() {
               layout
               onClick={toggleTheme}
               className="p-1.5 hover:bg-secondary/50 rounded-full transition-colors relative flex-shrink-0"
+              whileHover={{ scale: 1.1 }}
             >
               <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
               <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 top-1.5 left-1.5" />
@@ -152,102 +224,6 @@ export function TimeWeatherWidget() {
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
-
-      <motion.div layout className="w-[1px] h-5 bg-muted-foreground/20 flex-shrink-0" />
-
-      <motion.button
-        layout="position"
-        onClick={() => setIsExpanded(!isExpanded)}
-        className="p-1.5 hover:bg-secondary/50 rounded-full transition-colors flex-shrink-0"
-      >
-        {isExpanded ? (
-          <X className="h-4 w-4" />
-        ) : (
-          <Link2 className="h-4 w-4" />
-        )}
-      </motion.button>
-
-      <AnimatePresence mode="popLayout">
-        {isExpanded && (
-          <motion.div
-            layout
-            initial={{ opacity: 0, width: 0 }}
-            animate={{ opacity: 1, width: "auto" }}
-            exit={{ opacity: 0, width: 0 }}
-            transition={{ duration: 0.2 }}
-            className="flex items-center gap-3"
-          >
-            <motion.a
-              href={GITHUB_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-1.5 hover:bg-secondary/50 rounded-full transition-colors"
-            >
-              <SocialIcon platform="github" href={GITHUB_URL} size="sm" />
-            </motion.a>
-            <motion.a
-              href={`mailto:${EMAIL}`}
-              className="p-1.5 hover:bg-secondary/50 rounded-full transition-colors"
-            >
-              <SocialIcon platform="email" href={`mailto:${EMAIL}`} size="sm" />
-            </motion.a>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <motion.div layout="position" className="w-[1px] h-5 bg-muted-foreground/20 flex-shrink-0" />
-
-      <motion.div layout="position" className="flex items-center text-sm flex-shrink-0">
-        <span>{hours}</span>
-        <span className={`${showColon ? 'opacity-100' : 'opacity-0'} transition-opacity duration-150 mx-0.5`}>
-          :
-        </span>
-        <span>{minutes}</span>
-      </motion.div>
-
-      <AnimatePresence mode="wait">
-        {weatherData.city && (
-          <>
-            <motion.div
-              layout
-              initial={{ width: 0 }}
-              animate={{ width: "auto" }}
-              exit={{ width: 0 }}
-              className="flex items-center"
-            >
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="w-[1px] h-5 bg-muted-foreground/20 flex-shrink-0"
-              />
-
-              <TooltipProvider delayDuration={0}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <motion.span
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 200,
-                        damping: 20
-                      }}
-                      className="ml-4 flex-shrink-0 text-sm cursor-help"
-                    >
-                      {weatherData.temperature}°C
-                    </motion.span>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{weatherData.location}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
     </motion.div>
   );
 }

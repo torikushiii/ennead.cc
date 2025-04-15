@@ -7,12 +7,17 @@ interface DiscordResponse {
   avatar: string;
   global_name: string | null;
   banner?: string;
+  avatar_decoration_data?: {
+    asset: string;
+    sku_id: string;
+    expires_at: number;
+  };
 }
 
 // Cache the response for 1 minute
 let cachedData: DiscordResponse | null = null;
 let lastFetch = 0;
-const CACHE_DURATION = 60 * 1000; // 1 minute
+const CACHE_DURATION = 60 * 60 * 1000;
 
 export const GET: APIRoute = async () => {
   try {
@@ -42,7 +47,8 @@ export const GET: APIRoute = async () => {
       username: userData.username,
       avatar: userData.avatar,
       global_name: userData.global_name,
-      banner: userData.banner
+      banner: userData.banner,
+      avatar_decoration_data: userData.avatar_decoration_data
     };
 
     cachedData = filteredData;

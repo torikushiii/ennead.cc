@@ -1,0 +1,13 @@
+---
+import '@/styles/globals.css';
+import { NAME } from "@/script/constants";
+import Layout from '@/layouts/Layout.astro';
+import { Contact as ContactComponent } from '@/components/Contact';
+
+const title = `${NAME}`;
+const description = 'Get in touch with me.';
+---
+
+<Layout title={title} description={description}>
+	<ContactComponent client:load />
+</Layout>
