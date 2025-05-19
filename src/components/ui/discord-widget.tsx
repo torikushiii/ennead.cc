@@ -15,6 +15,24 @@ interface DiscordUser {
     sku_id: string;
     expires_at: number;
   };
+  clan?: {
+    identity_guild_id: string;
+    identity_enabled: boolean;
+    tag: string;
+    badge: string;
+  };
+  primary_guild?: {
+    identity_guild_id: string;
+    identity_enabled: boolean;
+    tag: string;
+    badge: string;
+  };
+  collectibles?: {
+    nameplate: {
+      sku_id: string;
+      asset: string;
+    };
+  };
 }
 
 export function DiscordWidget() {
@@ -55,7 +73,6 @@ export function DiscordWidget() {
     return () => observer.disconnect();
   }, []);
 
-  // Return placeholder with same dimensions while loading
   if (loading) {
     return (
       <motion.div
@@ -64,11 +81,11 @@ export function DiscordWidget() {
         animate={{ opacity: 1 }}
       >
         <div className="w-full h-24 bg-secondary/70" />
-        <div className="flex items-start gap-3 p-3">
+        <div className="flex items-start gap-1.5 p-3">
           <div className="relative flex-shrink-0">
             <div className="w-10 h-10 rounded-full bg-secondary/70" />
           </div>
-          <div className="flex flex-col gap-2 flex-grow">
+          <div className="flex flex-col gap-0.5 flex-grow">
             <div className="h-4 bg-secondary/70 rounded w-24" />
             <div className="h-3 bg-secondary/70 rounded w-16" />
           </div>
@@ -83,6 +100,14 @@ export function DiscordWidget() {
     const isGif = banner.startsWith('a_');
     const extension = isGif ? 'gif' : 'png';
     return `https://cdn.discordapp.com/banners/${DISCORD_ID}/${banner}.${extension}?size=480`;
+  };
+
+  const getNameplatePath = (asset: string) => {
+    return `https://cdn.discordapp.com/assets/collectibles/${asset}asset.webm`;
+  };
+
+  const getClanBadgeUrl = (badge: string, guildId: string) => {
+    return `https://cdn.discordapp.com/clan-badges/${guildId}/${badge}.png?size=16`;
   };
 
   return (
@@ -101,8 +126,20 @@ export function DiscordWidget() {
           />
         </div>
       )}
-      <div className="flex items-start gap-3 p-3">
-        <div className="relative flex-shrink-0">
+      <div className="flex items-start gap-1.5 p-3 relative">
+        {userData.collectibles?.nameplate && (
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <video
+              src={getNameplatePath(userData.collectibles.nameplate.asset)}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover opacity-80"
+            />
+          </div>
+        )}
+        <div className="relative flex-shrink-0 z-10">
           <img
             src={`https://cdn.discordapp.com/avatars/${DISCORD_ID}/${userData.avatar}`}
             alt={userData.username}
@@ -116,17 +153,36 @@ export function DiscordWidget() {
             />
           )}
         </div>
-        <div className="flex flex-col min-w-0 leading-tight">
-          <span className="text-sm font-medium truncate">
+        <div className="flex flex-col min-w-0 leading-tight z-10 w-full">
+          <span className="text-sm font-medium truncate backdrop-blur-sm bg-background/30 px-1 rounded block w-fit">
             {userData.global_name || userData.username}
           </span>
-          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+          <div className="flex items-center gap-1 text-xs text-muted-foreground backdrop-blur-sm bg-background/30 px-1 rounded mt-0.5 w-fit">
             <img
               src={theme === 'dark' ? "/discord.png" : "/discord-black.png"}
               alt="Discord Icon"
               className="w-3 h-3"
             />
             <span>Discord</span>
+            {(userData.clan?.tag || userData.primary_guild?.tag) && (
+              <span className="ml-0.5 bg-primary/10 px-1 rounded text-[10px] flex items-center gap-0.5">
+                {userData.clan?.badge && userData.clan?.identity_guild_id && (
+                  <img
+                    src={getClanBadgeUrl(userData.clan.badge, userData.clan.identity_guild_id)}
+                    alt="Clan Badge"
+                    className="w-3 h-3"
+                  />
+                )}
+                {userData.primary_guild?.badge && userData.primary_guild?.identity_guild_id && !userData.clan && (
+                  <img
+                    src={getClanBadgeUrl(userData.primary_guild.badge, userData.primary_guild.identity_guild_id)}
+                    alt="Guild Badge"
+                    className="w-3 h-3"
+                  />
+                )}
+                {userData.clan?.tag || userData.primary_guild?.tag}
+              </span>
+            )}
           </div>
         </div>
       </div>

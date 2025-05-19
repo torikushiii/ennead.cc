@@ -12,12 +12,29 @@ interface DiscordResponse {
     sku_id: string;
     expires_at: number;
   };
+  clan?: {
+    identity_guild_id: string;
+    identity_enabled: boolean;
+    tag: string;
+    badge: string;
+  };
+  primary_guild?: {
+    identity_guild_id: string;
+    identity_enabled: boolean;
+    tag: string;
+    badge: string;
+  };
+  collectibles?: {
+    nameplate: {
+      sku_id: string;
+      asset: string;
+    };
+  };
 }
 
-// Cache the response for 1 minute
 let cachedData: DiscordResponse | null = null;
 let lastFetch = 0;
-const CACHE_DURATION = 60 * 60 * 1000;
+const CACHE_DURATION = 60 * 60 * 5000;
 
 export const GET: APIRoute = async () => {
   try {
@@ -48,7 +65,10 @@ export const GET: APIRoute = async () => {
       avatar: userData.avatar,
       global_name: userData.global_name,
       banner: userData.banner,
-      avatar_decoration_data: userData.avatar_decoration_data
+      avatar_decoration_data: userData.avatar_decoration_data,
+      clan: userData.clan,
+      collectibles: userData.collectibles,
+      primary_guild: userData.primary_guild,
     };
 
     cachedData = filteredData;
