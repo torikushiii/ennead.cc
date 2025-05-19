@@ -106,8 +106,8 @@ export function Home() {
           </motion.h1>
 
           <motion.p variants={mainItemVariants} className="text-muted-foreground max-w-2xl px-6 text-sm md:text-base">
-            Hello! I'm {NAME}, a backend developer and JavaScript developer who builds automation solutions.
-            I focus on creating efficient tools that solve real problems while constantly expanding my technical expertise through hands-on projects.
+            Hello! I'm {NAME}, a backend developer and mostly play around with JavaScript and build automation.
+            I like to create tools that make me do less clicks.
           </motion.p>
 
           {!loading && !error && projects.length > 0 && (
