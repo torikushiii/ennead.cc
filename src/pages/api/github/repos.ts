@@ -29,7 +29,7 @@ const REPO_URLS = [
   "repos/torikushiii/hoyoverse-api",
   "repos/torikushiii/youtube-archive",
   "repos/torikushiii/levelinfinite",
-  "repos/torikushiii/uploader"
+  "repos/torikushiii/discord-widget"
 ];
 
 export const GET: APIRoute = async ({ locals }) => {
